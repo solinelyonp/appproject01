@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        
+        #search-tip {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px; /* Add margin to separate from the title */
+        }
+        #search-box {
+            margin: 20px auto;
+            display: block;
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        #search-box:focus {
+            border-color: #6c63ff;
+            outline: none;
+        }
+        
+        #picture-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+            justify-items: center;
+        }
+        
+        .picture-container {
+            text-align: center;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+        
+
+        
+        .picture-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+
+        
+        .file-name {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Sudoku Solutions</h2>
+
+    <!-- Search tip -->
+    <p id="search-tip">To display the puzzle solution, enter the puzzle number only. <br>For example, entering 7 will show the solution for puzzle number 7.</p>
+
+    <!-- Search box -->
+    <input type="text" id="search-box" placeholder="Enter a Sudoku puzzle number for solution...">
+    
+    <!-- Picture gallery -->
+    <div id="picture-gallery">
+
+    </div>
+    
+    <script>
+        // JavaScript to dynamically create picture containers for images in the "02" folder
+        document.addEventListener('DOMContentLoaded', function() {
+            // Specify the folder name
+            let folderName = '02';
+            // Get the picture gallery container
+            let pictureGallery = document.getElementById('picture-gallery');
+
+            // Loop through each image in the folder
+            for (let i = 1; i <= 1000; i++) { // Assuming you have 1000 images
+                // Create a new picture container
+                let pictureContainer = document.createElement('div');
+                pictureContainer.className = 'picture-container';
+
+                // Create the image element
+                let image = document.createElement('img');
+                image.src = `${folderName}/Solution${i}.png`; // Assuming your images are named Solution1.png, Solution2.png, etc.
+                image.alt = `Solution${i}`;
+
+                // Call function to add image label
+                addImageLabel(pictureContainer, image.src);
+
+                // Append the image to the picture container
+                pictureContainer.appendChild(image);
+
+                // Hide the picture container initially
+                pictureContainer.style.display = 'none';
+
+                // Append the picture container to the picture gallery
+                pictureGallery.appendChild(pictureContainer);
+            }
+        });
+
+        // Function to add image label
+        function addImageLabel(container, src) {
+            // Extract file name from image source
+            let fileName = src.split('/').pop().split('.')[0];
+            let fileNameElement = document.createElement('div');
+            fileNameElement.className = 'file-name';
+            
+            // Add a space after "Solution" in the file name
+            fileName = fileName.replace('Solution', 'Solution ');
+
+            fileNameElement.textContent = fileName;
+
+            // Adjust font size
+            fileNameElement.style.fontSize = '20px'; // Adjust the font size as needed
+
+            // Append the image label to the top of the picture container
+            container.insertBefore(fileNameElement, container.firstChild);
+        }
+
+        // JavaScript to filter pictures based on search input
+        document.getElementById('search-box').addEventListener('input', function() {
+            let searchValue = this.value.trim(); // Trim whitespace from search value
+            let pictures = document.querySelectorAll('#picture-gallery .picture-container');
+
+            pictures.forEach(function(container) {
+                let img = container.querySelector('img');
+                let altText = img.getAttribute('alt').toLowerCase();
+
+                // Extract the number from the alt text
+                let altNumber = altText.replace('solution', '').trim();
+
+                // Check if the search value matches the image number
+                if (searchValue === altNumber) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        });
+
+
+    </script>
+
+    
+
+</body>
+</html>
